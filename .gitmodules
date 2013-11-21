@@ -1,0 +1,3 @@
+[submodule "json-spirit"]
+	path = json-spirit
+	url = https://github.com/vinni-au/json-spirit.git
