@@ -2,7 +2,6 @@
 #define FETCHMESSAGE_HPP
 
 #include "message.hpp"
-#include <cstdint>
 
 class FetchMessage : public Message
 {
@@ -14,6 +13,8 @@ private:
     FetchMessage(uint32_t lastID);
 
     uint32_t m_lastID;
+
+    friend class MessageFactory;
 };
 
 #endif // FETCHMESSAGE_HPP

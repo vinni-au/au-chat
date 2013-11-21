@@ -13,13 +13,23 @@ SOURCES += message.cpp \
     messagefactory.cpp \
     loginmessage.cpp \
     loginmessageres.cpp \
-    fetchmessage.cpp
+    fetchmessage.cpp \
+    textmessage.cpp \
+    sendmessage.cpp \
+    logoutmessagereq.cpp \
+    listusermessagereq.cpp \
+    listusermessage.cpp
 
 HEADERS += message.hpp \
     messagefactory.hpp \
     loginmessage.hpp \
     loginmessageres.hpp \
-    fetchmessage.hpp
+    fetchmessage.hpp \
+    textmessage.hpp \
+    sendmessage.hpp \
+    logoutmessagereq.hpp \
+    listusermessagereq.hpp \
+    listusermessage.hpp
 
 unix:!symbian {
     maemo5 {

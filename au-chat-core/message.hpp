@@ -1,6 +1,7 @@
 #ifndef MESSAGE_HPP
 #define MESSAGE_HPP
 
+#include <cstdint>
 #include <string>
 
 
@@ -16,7 +17,7 @@ public:
         Fetch,
         Text,
         Send,
-        Logout,
+        //Logout,
         LogoutReq,
         ListUser,
         ListUserReq
