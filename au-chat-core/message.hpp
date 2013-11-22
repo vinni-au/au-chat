@@ -26,6 +26,10 @@ public:
     // to JSON string
     virtual std::string toJSON() = 0;
 
+    uint8_t type() {
+        return uint8_t(m_type);
+    }
+
 protected:
     Type m_type;
 

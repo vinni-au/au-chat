@@ -18,7 +18,8 @@ SOURCES += message.cpp \
     sendmessage.cpp \
     logoutmessagereq.cpp \
     listusermessagereq.cpp \
-    listusermessage.cpp
+    listusermessage.cpp \
+    networkmessage.cpp
 
 HEADERS += message.hpp \
     messagefactory.hpp \
@@ -29,7 +30,8 @@ HEADERS += message.hpp \
     sendmessage.hpp \
     logoutmessagereq.hpp \
     listusermessagereq.hpp \
-    listusermessage.hpp
+    listusermessage.hpp \
+    networkmessage.hpp
 
 unix:!symbian {
     maemo5 {
