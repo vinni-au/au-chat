@@ -5,7 +5,8 @@ CONFIG += ordered
 SUBDIRS += \
     au-chat-core \
     server \
-    client
+    client \
+    test
 
 server.depends = au-chat-core
 client.depends = au-chat-core
