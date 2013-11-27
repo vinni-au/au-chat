@@ -7,7 +7,7 @@ CONFIG += staticlib
 QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += ../json-spirit/include
-LIBS += ../json-spirit/build/libjson_spirit.a
+#LIBS += ../json-spirit/build/libjson_spirit.a
 
 SOURCES += message.cpp \
     messagefactory.cpp \

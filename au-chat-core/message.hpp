@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <string>
+#include <json_spirit/writer_template.h>
+#include <json_spirit/reader_template.h>
 
 
 /* abstract */

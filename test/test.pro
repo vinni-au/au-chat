@@ -5,7 +5,7 @@ CONFIG -= qt
 
 SOURCES += main.cpp
 
-INCLUDEPATH += ../au-chat-core
-LIBS += ../au-chat-core/libau-chat-core.a ../json-spirit/build/libjson_spirit.a
+INCLUDEPATH += ../au-chat-core ../json-spirit/include
+LIBS += ../au-chat-core/libau-chat-core.a -lboost_system
 
 QMAKE_CXXFLAGS += -std=c++11

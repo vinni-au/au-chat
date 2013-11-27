@@ -1,7 +1,6 @@
 #ifndef MESSAGEFACTORY_HPP
 #define MESSAGEFACTORY_HPP
 
-#include "message.hpp"
 #include "loginmessage.hpp"
 #include "loginmessageres.hpp"
 #include "fetchmessage.hpp"

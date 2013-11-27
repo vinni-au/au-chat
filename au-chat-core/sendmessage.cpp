@@ -7,5 +7,8 @@ SendMessage::SendMessage(std::string text) :
 }
 
 std::string SendMessage::toJSON() {
-    return "";
+    json_spirit::Object object;
+    object["type"] = m_type;
+    object["text"] = m_text;
+    return json_spirit::write_string( json_spirit::Value(object) );
 }
