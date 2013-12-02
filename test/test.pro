@@ -1,7 +1,8 @@
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG -= qt
+QT += core sql
+QT -= gui
 
 SOURCES += main.cpp
 

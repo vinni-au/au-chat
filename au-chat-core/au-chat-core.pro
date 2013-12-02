@@ -1,4 +1,5 @@
-QT       -= core gui
+QT       += core sql
+QT -= gui
 
 TARGET = au-chat-core
 TEMPLATE = lib

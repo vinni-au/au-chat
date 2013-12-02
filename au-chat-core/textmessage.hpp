@@ -2,12 +2,16 @@
 #define TEXTMESSAGE_HPP
 
 #include "message.hpp"
+#include <QSqlQuery>
 
 class TextMessage : public Message
 {
 public:
 
     std::string toJSON();
+
+    boost::shared_ptr<QSqlQuery> insertQuery();
+    boost::shared_ptr<QSqlQuery> selectQuery(uint32_t lastid);
 
 private:
     uint32_t m_id;
