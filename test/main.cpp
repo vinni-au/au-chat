@@ -48,7 +48,10 @@ private:
 
     void handleReadHeader(const boost::system::error_code& err) {
         std::cout << "handlerReadHeader" << std::endl;
-
+        for (int i = 0; i < 5; ++i) {
+            std::cout << (int)m_data[i] << " ";
+        }
+        std::cout << std::endl;
     }
 
     boost::asio::io_service& m_io;
@@ -69,11 +72,11 @@ public:
     void start() {
         std::cout << "starting test client..." << std::endl;
 
-        tcp::resolver::query query(tcp::v4(), "127.0.0.1", "5555");
-        tcp::resolver::iterator iterator = m_resolver.resolve(query);
+//        tcp::resolver::query query(tcp::v4(), "127.0.0.1", "5555");
+//        tcp::resolver::iterator iterator = m_resolver.resolve(query);
 
-        tcp::socket s(m_io);
-        s.connect(*iterator);
+
+//        s.connect(*iterator);
 
         boost::shared_ptr<Message> msg ( MessageFactory::createLoginMessage("nick") );
 
@@ -88,8 +91,15 @@ public:
         std::vector<uint8_t> bytes = m_msg->toByteArray();
         char buf[1024];
         std::copy(bytes.begin(), bytes.end(), buf);
-
-        boost::asio::write(s, boost::asio::buffer( buf, request_len ));
+        for (int i = 0; i < 5; ++i) {
+            std::cout << (int)buf[i] << " ";
+        }
+        std::cout << std::endl << request_len << std::endl;
+        boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 5555);
+        tcp::socket s(m_io);
+        s.connect(ep);
+        s.write_some(boost::asio::buffer(buf, request_len));
+//        boost::asio::write(s, boost::asio::buffer( buf, request_len ));
     }
 
 private:
