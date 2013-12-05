@@ -5,10 +5,9 @@ TARGET = au-chat-core
 TEMPLATE = lib
 CONFIG += staticlib
 
-QMAKE_CXXFLAGS += -std=c++11
+include(../config.pri)
 
 INCLUDEPATH += ../json-spirit/include
-#LIBS += ../json-spirit/build/libjson_spirit.a
 
 SOURCES += message.cpp \
     messagefactory.cpp \
@@ -20,7 +19,8 @@ SOURCES += message.cpp \
     logoutmessagereq.cpp \
     listusermessagereq.cpp \
     listusermessage.cpp \
-    networkmessage.cpp
+    networkmessage.cpp \
+    connection.cpp
 
 HEADERS += message.hpp \
     messagefactory.hpp \
@@ -32,7 +32,8 @@ HEADERS += message.hpp \
     logoutmessagereq.hpp \
     listusermessagereq.hpp \
     listusermessage.hpp \
-    networkmessage.hpp
+    networkmessage.hpp \
+    connection.hpp
 
 unix:!symbian {
     maemo5 {

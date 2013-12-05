@@ -4,6 +4,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = client
 TEMPLATE = app
+
+include(../config.pri)
+
 INCLUDEPATH += ../au-chat-core
 LIBS += ../au-chat-core/libau-chat-core.a
 

@@ -8,7 +8,6 @@ LoginMessageRes::LoginMessageRes(Error error)
 
 std::string LoginMessageRes::toJSON() {
     json_spirit::Object object;
-    object["type"] = m_type;
     object["error"] = m_error;
     return json_spirit::write_string( json_spirit::Value(object) );
 }

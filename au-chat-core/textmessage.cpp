@@ -11,8 +11,6 @@ TextMessage::TextMessage(uint32_t id, std::string nickname, std::string text) :
 
 std::string TextMessage::toJSON() {
     json_spirit::Object object;
-    object["type"] = m_type;
-    object["id"] = m_id;
     object["nickname"] = m_nickname;
     object["text"] = m_text;
     return json_spirit::write_string( json_spirit::Value(object) );

@@ -2,9 +2,9 @@
 
 NetworkMessage::NetworkMessage(boost::shared_ptr<Message> message,
                                uint32_t flags, ProtocolVersion version) :
-    m_flags(flags), m_version(version.packed())
+    m_flags(flags), m_version(version.packed()), m_message(message)
 {
-    m_length = message->toJSON().size();
+    m_length = m_message->toJSON().size();
 }
 
 std::vector<uint8_t> NetworkMessage::toByteArray() {
@@ -14,7 +14,7 @@ std::vector<uint8_t> NetworkMessage::toByteArray() {
 
     } _32to8;
 
-    std::vector<uint8_t> result(22);
+    std::vector<uint8_t> result;
     result.push_back(m_message->type());
 
     _32to8.uint32 = m_length;

@@ -45,11 +45,17 @@ public:
         Compressed  = 0x00000001,
         Encrypted   = 0x00000002
     };
-private:
+
     NetworkMessage(boost::shared_ptr<Message> message,
                    uint32_t flags, ProtocolVersion version);
 
     std::vector<uint8_t> toByteArray();
+
+    uint32_t length() const
+    { return m_length; }
+
+
+private:
 
     uint32_t m_length;
     boost::shared_ptr<Message> m_message;

@@ -8,7 +8,6 @@ LoginMessage::LoginMessage(std::string login) :
 
 std::string LoginMessage::toJSON() {
     json_spirit::Object object;
-    object["type"] = m_type;
     object["login"] = m_login;
     return json_spirit::write_string( json_spirit::Value(object) );
 }

@@ -1,6 +1,6 @@
 #include "messagefactory.hpp"
 
-boost::shared_ptr<Message> MessageFactory::fromJSON(std::string ) {
+boost::shared_ptr<Message> MessageFactory::fromJSON(uint32_t type, std::string json) {
     return boost::shared_ptr<Message>();
 }
 

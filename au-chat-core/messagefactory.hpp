@@ -15,7 +15,7 @@ class MessageFactory
 {
 public:
     static
-    boost::shared_ptr<Message> fromJSON(std::string json);
+    boost::shared_ptr<Message> fromJSON(uint32_t type, std::string json);
 
     static
     boost::shared_ptr<LoginMessage> createLoginMessage(std::string login);
