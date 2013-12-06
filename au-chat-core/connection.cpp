@@ -1,9 +1,10 @@
 #include "connection.hpp"
 
 Connection::Connection(boost::asio::io_service &ioservice,
-                       ProtocolVersion version)
+                       ProtocolVersion version, uint32_t flags)
     : m_socket(ioservice)
     , m_version(version)
+    , m_flags(flags)
 {
 }
 
@@ -29,8 +30,20 @@ void Connection::handleReadHeader(const boost::system::error_code &err) {
     std::cout << std::endl;
 
 #endif
+
+
 }
 
-void Connection::sendMessage(boost::shared_ptr<NetworkMessage> message) {
+void Connection::connect(tcp::endpoint& ep) {
+    m_socket.connect(ep);
+}
 
+void Connection::sendMessage(boost::shared_ptr<Message> message) {
+#ifdef DEBUG_MODE
+    std::cout << "sending message" << std::endl;
+#endif
+
+    NetworkMessage msg(message, m_flags, m_version);
+    std::vector<uint8_t> bytes = msg.toByteArray();
+    m_socket.write_some(boost::asio::buffer(bytes, bytes.size()));
 }

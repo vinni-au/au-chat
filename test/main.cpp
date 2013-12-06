@@ -86,33 +86,17 @@ public:
     void start() {
         std::cout << "starting test client..." << std::endl;
 
-//        tcp::resolver::query query(tcp::v4(), "127.0.0.1", "5555");
-//        tcp::resolver::iterator iterator = m_resolver.resolve(query);
-
-
-//        s.connect(*iterator);
+        Connection connection(m_io);
+        boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 5555);
+        connection.connect(ep);
 
         boost::shared_ptr<Message> msg ( MessageFactory::createLoginMessage("nick") );
 
+        m_msg.reset(
+                    new NetworkMessage(msg, 0, ProtocolVersion::v1_0())
+                    );
 
-        m_msg.reset (
-                    new NetworkMessage(
-                            msg,
-                        0, ProtocolVersion::v1_0()
-                        ) );
-
-        std::vector<uint8_t> bytes = m_msg->toByteArray();
-        size_t request_len = bytes.size();
-        char buf[1024];
-        std::copy(bytes.begin(), bytes.end(), buf);
-        for (int i = 0; i < request_len; ++i) {
-            std::cout << (int)buf[i] << " ";
-        }
-        std::cout << std::endl << request_len << std::endl;
-        boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 5555);
-        tcp::socket s(m_io);
-        s.connect(ep);
-        s.write_some(boost::asio::buffer(buf, request_len));
+        connection.sendMessage(msg);
     }
 
 private:
