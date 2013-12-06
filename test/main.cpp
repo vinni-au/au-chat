@@ -3,6 +3,7 @@
 #include <connection.hpp>
 #include <thread>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/thread.hpp>
 
 //#define MESSAGE_TEST
 #define CONNECTION_TEST
@@ -34,22 +35,35 @@ private:
         std::cout << "client accepted" << std::endl;
 
         if (!err) {
-//            connection->start();
-            boost::asio::async_read(connection->socket(),
-                                    boost::asio::buffer(m_data, 5),
-                                    boost::bind(&server_test::handleReadHeader,
-                                                this,
-                                                boost::asio::placeholders::error));
+            boost::thread thread([connection](){
+                std::cout << "running thread" << std::endl;
+                connection->start();
+            });
+
+            start();
         } else {
             std::cout << "error while accepting client" << std::endl;
             connection.reset();
         }
+
     }
 
-    void handleReadHeader(const boost::system::error_code& err) {
+    void handleReadHeader(boost::shared_ptr<Connection> connection,
+                          const boost::system::error_code& err) {
         std::cout << "handlerReadHeader" << std::endl;
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 11; ++i) {
             std::cout << (int)m_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+        std::vector<uint8_t> bytes;
+        std::copy(m_data, m_data+11, std::back_inserter(bytes));
+        NetworkMessage::Header header = NetworkMessage::Header::fromByteArray(bytes);
+        std::cout << "body size = " << header.length << std::endl;
+
+        boost::asio::read(connection->socket(), boost::asio::buffer(m_data, header.length));
+        for (int i = 0; i < header.length; ++i) {
+            std::cout << (char)m_data[i];
         }
         std::cout << std::endl;
     }
@@ -87,11 +101,11 @@ public:
                         0, ProtocolVersion::v1_0()
                         ) );
 
-        size_t request_len = m_msg->length();
         std::vector<uint8_t> bytes = m_msg->toByteArray();
+        size_t request_len = bytes.size();
         char buf[1024];
         std::copy(bytes.begin(), bytes.end(), buf);
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < request_len; ++i) {
             std::cout << (int)buf[i] << " ";
         }
         std::cout << std::endl << request_len << std::endl;
@@ -99,12 +113,10 @@ public:
         tcp::socket s(m_io);
         s.connect(ep);
         s.write_some(boost::asio::buffer(buf, request_len));
-//        boost::asio::write(s, boost::asio::buffer( buf, request_len ));
     }
 
 private:
     boost::asio::io_service& m_io;
-//    tcp::acceptor m_acceptor;
     tcp::resolver m_resolver;
 
     boost::shared_ptr<NetworkMessage> m_msg;

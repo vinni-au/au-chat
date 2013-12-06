@@ -25,15 +25,23 @@ public:
         ListUserReq
     };
 
-    // to JSON string
-    virtual std::string toJSON() = 0;
+    std::string json();
 
-    uint8_t type() {
+    uint8_t type() const {
         return uint8_t(m_type);
     }
 
+    size_t size() {
+        return json().size();
+    }
+
 protected:
+    // to JSON string
+    virtual std::string toJSON() = 0;
+
     Type m_type;
+    boost::shared_ptr<std::string> m_json;
+    size_t m_size;
 
     friend class MessageFactory;
 };

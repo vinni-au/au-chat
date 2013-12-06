@@ -11,16 +11,14 @@ class Connection : public QObject
 {
     Q_OBJECT
 public:
-    Connection(boost::asio::io_service& ioservice);
+    Connection(boost::asio::io_service& ioservice,
+               ProtocolVersion version = ProtocolVersion::v1_0());
 
     tcp::socket& socket() {
         return m_socket;
     }
 
     void start();
-
-    void handleRead(const boost::system::error_code& err,
-                    size_t bytes_transferred);
 
     void handleReadHeader(const boost::system::error_code& err);
 
@@ -31,6 +29,7 @@ signals:
 
 private:
     tcp::socket m_socket;
+    ProtocolVersion m_version;
     static const int MAX_LEN = 1024;
     char m_data[MAX_LEN];
 };
