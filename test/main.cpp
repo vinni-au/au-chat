@@ -38,6 +38,12 @@ private:
             boost::thread thread([connection](){
                 std::cout << "running thread" << std::endl;
                 connection->start();
+
+//                boost::shared_ptr<Message> msg(
+//                            MessageFactory::createLoginMessageRes(LoginMessageRes::NOERROR)
+//                            );
+
+//                connection->sendMessage(msg);
             });
 
             start();
@@ -46,26 +52,6 @@ private:
             connection.reset();
         }
 
-    }
-
-    void handleReadHeader(boost::shared_ptr<Connection> connection,
-                          const boost::system::error_code& err) {
-        std::cout << "handlerReadHeader" << std::endl;
-        for (int i = 0; i < 11; ++i) {
-            std::cout << (int)m_data[i] << " ";
-        }
-        std::cout << std::endl;
-
-        std::vector<uint8_t> bytes;
-        std::copy(m_data, m_data+11, std::back_inserter(bytes));
-        NetworkMessage::Header header = NetworkMessage::Header::fromByteArray(bytes);
-        std::cout << "body size = " << header.length << std::endl;
-
-        boost::asio::read(connection->socket(), boost::asio::buffer(m_data, header.length));
-        for (int i = 0; i < header.length; ++i) {
-            std::cout << (char)m_data[i];
-        }
-        std::cout << std::endl;
     }
 
     boost::asio::io_service& m_io;
@@ -86,17 +72,18 @@ public:
     void start() {
         std::cout << "starting test client..." << std::endl;
 
-        Connection connection(m_io);
+        boost::shared_ptr<Connection> connection( new Connection(m_io) );
         boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 5555);
-        connection.connect(ep);
+        connection->connect(ep);
 
         boost::shared_ptr<Message> msg ( MessageFactory::createLoginMessage("nick") );
 
-        m_msg.reset(
-                    new NetworkMessage(msg, 0, ProtocolVersion::v1_0())
-                    );
+//        m_msg.reset(
+//                    new NetworkMessage(msg, 0, ProtocolVersion::v1_0())
+//                    );
 
-        connection.sendMessage(msg);
+        connection->sendMessage(msg);
+//        connection->sendMessage(msg);
     }
 
 private:
@@ -131,6 +118,7 @@ int main(int argc, char* argv[])
         } else if ( std::string(argv[1]) == "--client" ) {
             client_test client(io_service, 5555);
             client.start();
+            io_service.run();
         } else {
             std::cerr << "unrecognized option" << std::endl;
         }

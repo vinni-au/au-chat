@@ -15,6 +15,8 @@ public:
                ProtocolVersion version = ProtocolVersion::v1_0(),
                uint32_t flags = 0);
 
+    //TODO: Connection принимает socket
+
     tcp::socket& socket() {
         return m_socket;
     }
@@ -26,6 +28,7 @@ public:
     void connect(tcp::endpoint &ep);
 
     void handleReadHeader(const boost::system::error_code& err);
+    void handleReadBody(NetworkMessage::Header header, const boost::system::error_code& err);
 
     void sendMessage(boost::shared_ptr<Message> message);
 

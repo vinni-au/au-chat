@@ -13,6 +13,10 @@ void Connection::start() {
     std::cout << "starting connection" << std::endl;
 #endif
 
+//    m_socket.async_read_some(boost::asio::buffer(m_data, NetworkMessage::Header::SIZE),
+//                             boost::bind(&Connection::handleReadHeader, this,
+//                                         boost::asio::placeholders::error));
+
     boost::asio::async_read(m_socket,
                             boost::asio::buffer(m_data, NetworkMessage::Header::SIZE),
                             boost::bind(&Connection::handleReadHeader, this,
@@ -31,11 +35,45 @@ void Connection::handleReadHeader(const boost::system::error_code &err) {
 
 #endif
 
+    std::vector<uint8_t> bytes;
+    std::copy(m_data, m_data + NetworkMessage::Header::SIZE, std::back_inserter(bytes));
 
+    NetworkMessage::Header header = NetworkMessage::Header::fromByteArray(bytes);
+//    boost::asio::async_read(m_socket, boost::asio::buffer(m_data, header.length),
+//                            boost::bind(&Connection::handleReadBody,
+//                                        this, header,
+//                                        boost::asio::placeholders::error()));
+    boost::asio::read(m_socket, boost::asio::buffer(m_data, header.length));
+
+#ifdef DEBUG_MODE
+    std::cout << "reading body" << std::endl;
+
+    for (int i = 0; i < header.length; ++i)
+        std::cout << int(m_data[i]) << " ";
+
+    std::cout << std::endl;
+#endif
+
+}
+
+void Connection::handleReadBody(NetworkMessage::Header header,
+                                const boost::system::error_code &err)
+{
+#ifdef DEBUG_MODE
+    std::cout << "Connection::handleReadBody" << std::endl;
+
+    for (int i = 0; i < header.length; ++i)
+        std::cout << int(m_data[i]) << " ";
+
+    std::cout << std::endl;
+#endif
+
+//    start();
 }
 
 void Connection::connect(tcp::endpoint& ep) {
     m_socket.connect(ep);
+//    start();
 }
 
 void Connection::sendMessage(boost::shared_ptr<Message> message) {
@@ -45,5 +83,6 @@ void Connection::sendMessage(boost::shared_ptr<Message> message) {
 
     NetworkMessage msg(message, m_flags, m_version);
     std::vector<uint8_t> bytes = msg.toByteArray();
-    m_socket.write_some(boost::asio::buffer(bytes, bytes.size()));
+    boost::asio::write(m_socket, boost::asio::buffer(bytes, bytes.size()));
+//    m_socket.write_some();
 }
